@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@model My_Special_Access_Funny_Picture_And_Video_Collection.Models.Media
+
+@if (Html.ViewData.Model.IsVideo)
+{
+    ViewData["Title"] = "View Video";
+}
+else
+{
+    ViewData["Title"] = "View Image";
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <h1>@ViewData["Title"]</h1>
+
+    <div>
+        <h4>@Html.DisplayFor(model => model.FileName).@Html.DisplayFor(model => model.FileType)</h4>
+        <hr />
+    </div>
+    <div>
+        <br />
+        @if (Html.ViewData.Model.IsVideo)
+        {
+            <video controls playsinline>
+                <source src="@Html.ViewData.Model.GetFileUrl()" type="video/mp4">
+                <a href="@Html.ViewData.Model.GetFileUrl()" download>Download</a>
+            </video>
+        }
+        else
+        {
+            <img width="640" src="@Html.ViewData.Model.GetFileUrl()" />
+        }
+        <br />
+        <a asp-action="Index">Back to List</a>
+    </div>
+    <div id="disqus_thread"></div>
+    <script>
+        
+        var disqus_config = function () {
+            this.page.identifier = "@Html.ViewData.Model.MediaID";
+        };
+        
+        (function () { // DON'T EDIT BELOW THIS LINE
+            var d = document, s = d.createElement('script');
+            s.src = 'https://my-school-assignment.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+}
+else
+{
+    <h1>
+        Please <a href="/Identity/Account/Login">login</a>or <a href="/Identity/Account/Register"> register </a> if you wish to view something in the collection.
+    </h1>
+}

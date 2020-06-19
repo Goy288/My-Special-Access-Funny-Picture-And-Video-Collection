@@ -1,47 +1,60 @@
-﻿@model IEnumerable<My_Special_Access_Funny_Picture_And_Video_Collection.Models.Media>
+﻿@using System
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@model IEnumerable<My_Special_Access_Funny_Picture_And_Video_Collection.Models.Media>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "The Collection";
 
 }
-<h1>@ViewData["Title"]</h1>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FileName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FileType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsVideo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+@if (SignInManager.IsSignedIn(User))
+{
+    <h1>@ViewData["Title"]</h1>
+    <p>
+        <a asp-action="Add">Add New</a>
+    </p>
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FileName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FileType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsVideo)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.MediaID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.MediaID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.MediaID">Delete</a> |
-                    <a href="@item.GetFileUrl()">Download</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.FileName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FileType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsVideo)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FileName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FileType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsVideo)
+                    </td>
+                    <td>
+                        <a asp-action="View" asp-route-id="@item.MediaID">View</a> |
+                        <a asp-action="Delete" asp-route-id="@item.MediaID">Delete</a> |
+                        <a download href="@item.GetFileUrl()">Download</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h1>
+        Please <a href="/Identity/Account/Login">login</a> or <a href="/Identity/Account/Register">register</a> if you wish to add to the collection.
+    </h1>
+}

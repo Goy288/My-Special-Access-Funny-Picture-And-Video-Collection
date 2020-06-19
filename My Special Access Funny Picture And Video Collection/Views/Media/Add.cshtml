@@ -1,0 +1,38 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@model My_Special_Access_Funny_Picture_And_Video_Collection.Models.Media
+@{
+    ViewData["Title"] = "Add Media";
+
+}
+@if (User.Identity.Name == "administrator")
+{
+    <h1>@ViewData["Title"]</h1>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-controller="Media" asp-action="Create" method="post" enctype="multipart/form-data">
+                <label for="file">Upload Media:</label>
+                <input type="file" name="file" id="file" /><br><br>
+                <input type="submit" class="btn btn-primary" value="Upload Media" />
+                <br><br>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+}
+else
+{
+    <h1>
+        Admin access is required if you wish to add to the collection.
+    </h1>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -20,17 +20,20 @@ namespace My_Special_Access_Funny_Picture_And_Video_Collection.Areas.Identity.Pa
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        //private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
+            //RoleManager<IdentityRole> roleManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
             _userManager = userManager;
+            //_roleManager = roleManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
@@ -80,6 +83,8 @@ namespace My_Special_Access_Funny_Picture_And_Video_Collection.Areas.Identity.Pa
             if (ModelState.IsValid)
             {
                 var user = new IdentityUser { UserName = Input.Username, Email = Input.Email };
+
+                //await _userManager.AddToRoleAsync(user, "admin");
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

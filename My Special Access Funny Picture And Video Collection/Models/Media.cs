@@ -26,10 +26,10 @@ namespace My_Special_Access_Funny_Picture_And_Video_Collection.Models
 
         public Media(string fileName)
         {
-            string[] fileNamePieces = fileName.Split('.');
+            int index = fileName.LastIndexOf('.');
 
-            FileName = fileNamePieces[0];
-            FileType = fileNamePieces[1].ToLower();
+            FileName = fileName.Substring(0, index);
+            FileType = fileName.Substring(index + 1);
 
             IsVideo = false;
             foreach (string videoType in VideoTypes)
@@ -63,7 +63,7 @@ namespace My_Special_Access_Funny_Picture_And_Video_Collection.Models
         {
             string url = "/meme/";
             url += IsVideo ? "vid/" : "img/";
-            url += FileName + "." + FileType;
+            url += Uri.EscapeDataString(FileName) + "." + FileType;
             return url;
         }
     }
